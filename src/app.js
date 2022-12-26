@@ -1,29 +1,18 @@
-
-
 async function makeTour() {
 
     const response = await fetch('https://www.bit-by-bit.ru/api/student-projects/tours')
     const data = await response.json()
-
-    const tour = data.tour
-
-    console.log(data)
     
-    const container2 = document.getElementById('container'); //находим в HTML контейнер для новых туров
+    const container2 = document.getElementById('container'); 
 
     function renderTours() {
-
-            //данная функция визуализирует наши туры
             
-        container2.innerHTML = ""; //пустой контейнер
+        container2.innerHTML = ""; 
 
         data.forEach((tour) => {
-        
-            //добавляем в HTML контейнер, в котором описаны значения туров
 
             container2.innerHTML += `
             
-
                 <div class="bg-white shadow-lg rounded-lg overflow-hidden">
 
                         <img class="h-96 w-full" src="${tour.image}" alt="" />
@@ -54,26 +43,52 @@ async function makeTour() {
 
                         </div>
                 </div>
-            
-
             `
         });
 
-        // function getCity(tourCityNull) {
-        //     let checkCity = document.getElementById('tour.city');
-        //     if (tourCityNull) {
-        //         checkCity = ${tour.city};
+        // const checkCity = document.getElementById('tour.city');
+        // const checkCountry = document.getElementById('tour.country');
+
+        // function getCity(checkCity) {
+        //     let tourCityNull
+            
+        //     if (checkCity) {
+        //         tourCityNull = checkCity;
         //     } else {
-        //         checkCity = ${tour.country};
+        //         tourCityNull = checkCountry;
         //     }
-        //     return checkCity
+        //     return tourCityNull
         // }
-
-      
-
+       
     }
 
-    renderTours()
+    
 }    
 
+renderTours()
 makeTour()
+
+function filterByCountry(tours, country) {
+    if(country) {
+        const filtredTours = tours.filter((tour) => {
+            return tour.country === country
+        })
+            renderTours(filtredTours)
+        }else {
+            renderTours(tours)
+    }
+
+}
+
+async function init() {
+    const tours = await makeTour()
+    renderTours(tours)
+
+    document.getElementById('indonesia').addEventListener('click', () => filterByCountry(tours, 'Индонезия'))
+    document.getElementById('thailand').addEventListener('click', () => filterByCountry(tours, 'Тайланд'))
+    document.getElementById('maldives').addEventListener('click', () => filterByCountry(tours, 'Мальдивы'))
+    document.getElementById('all').addEventListener('click', () => filterByCountry(tours))
+
+}
+
+init()
