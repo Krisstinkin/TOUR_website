@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .btn-primary {
     @apply border border-solid border-yellow-600 px-4 py-2 rounded-md hover:bg-yellow-600 hover:text-white transition-all duration-300;
-}
-
-.hide {
-    display: none;
 }
