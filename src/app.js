@@ -13,6 +13,7 @@ async function makeTour() {
 const tourCity = document.getElementById('tourCity');
 const tourCountry = document.getElementById('tourCountry');
 
+
 function getCity(tourCity) {
     let checkCity;
 
