@@ -1,10 +1,6 @@
-import { format, differenceInCalendarDays } from 'date-fns'
-import { ru } from 'date-fns/locale'
-
 async function makeTour() {
-    const response = await fetch(
-        "https://www.bit-by-bit.ru/api/student-projects/tours"
-    )
+
+    const response = await fetch('https://www.bit-by-bit.ru/api/student-projects/tours')
     const data = await response.json()
 
     return data
@@ -24,21 +20,17 @@ function getCity(tourCity) {
     return checkCity
 }
 
-function renderTours(tours) {
-    const container2 = document.getElementById("container")
+    function renderTours() {
+            
+        container2.innerHTML = ""; 
 
-    container2.innerHTML = ""
+        data.forEach((tour) => {
 
-    tours.forEach((tour) => {
-        const pattern = 'dd MMMM y'
-        const option = {locale: ru}
-        const duration = differenceInCalendarDays(new Date(tour.endTime), new Date(tour.startTime))
+            container2.innerHTML += `
+            
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden">
 
-        container2.innerHTML += `
-        
-            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-
-                    <img class="h-96 w-full" src="${tour.image}" alt="" />
+                        <img class="h-96 w-full" src="${tour.image}" alt="" />
 
                     <div class="p-6">
                         <div>
@@ -51,16 +43,16 @@ function renderTours(tours) {
                             </a>
                         </div>
 
-                        <div class="mt-3 text-gray-500 text-sm flex items-center">
-                            <img class="h-4" src="https://img.icons8.com/ios/50/null/christmas-star.png"/>
+                            <div class="mt-3 text-gray-500 text-sm flex items-center">
+                                <img class="h-4" src="https://img.icons8.com/ios/50/null/christmas-star.png"/>
 
-                            <span class="ml-1">${tour.rating}</span>
-                            <span aria-hidden="true" class="mx-2">&middot;</span>
+                                <span class="ml-1">${tour.rating}</span>
+                                <span aria-hidden="true" class="mx-2">&middot;</span>
 
-                            <img class="h-5" src="https://img.icons8.com/ios/50/null/ruble.png"/>
+                                <img class="h-5" src="https://img.icons8.com/ios/50/null/ruble.png"/>
 
-                            <span class="ml-1">${tour.price}</span>
-                        </div>
+                                <span class="ml-1">${tour.price}</span>
+                            </div>
 
                         <div class="mt-3 text-gray-500 text-sm flex items-center">
 
@@ -84,7 +76,7 @@ function renderTours(tours) {
 }
 
 function filterByCountry(tours, country) {
-    if (country) {
+    if(country) {
         const filtredTours = tours.filter((tour) => {
             return tour.country === country
         })

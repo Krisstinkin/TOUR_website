@@ -20,14 +20,36 @@
                 </div>
 
                 <div class="text-center mt-6">
-                    <h1 class="text-4xl font-bold text-gray-900">Маршруты по Питеру</h1>
+                    <h1 class="text-4xl font-bold text-gray-900">
+                        Маршруты по Любимым странам
+                    </h1>
                     <p class="text-gray-500 text-xl mt-4">
-                        Самые удивительные пешие маршруты прогулок по улицам
-                        любимого города
+                        Самые удивительные маршруты прогулок по улицам любимого
+                        города
                     </p>
                 </div>
 
-                <div class="mt-12 gap-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                <button id="thailand" class="btn-primary mt-6 mr-2">
+                    ТАИЛАНД
+                </button>
+                <button id="maldives" class="btn-primary mt-6 mr-2">
+                    МАЛЬДИВЫ
+                </button>
+                <button id="indonesia" class="btn-primary mt-6 mr-2">
+                    ИНДОНЕЗИЯ
+                </button>
+                <button id="all" class="btn-primary mt-6 mr-2">
+                    ВСЕ СТРАНЫ
+                </button>
+
+                <div
+                    class="mt-12 gap-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+                    id="container"
+                ></div>
+
+                <div
+                    class="mt-12 gap-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+                >
                     <!--  card  -->
                     <div class="bg-white shadow-lg rounded-lg overflow-hidden">
                         <img class="h-96 w-full" src="/src/images/trip-1 (1).jpeg" alt="" />
@@ -148,6 +170,7 @@
                         </div>
                     </div>
 
+                    <!--  card end  -->
                 </div>
             </div>
         </div>
