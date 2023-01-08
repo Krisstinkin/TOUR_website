@@ -10,7 +10,6 @@ async function makeTour() {
     return data
 }
 
-<<<<<<< HEAD
 const tourCity = document.getElementById('tourCity');
 const tourCountry = document.getElementById('tourCountry');
 
@@ -25,8 +24,6 @@ function getCity(tourCity) {
     return checkCity
 }
 
-=======
->>>>>>> 617ead5f18b36dd765fcdeed771f34871d81f4e3
 function renderTours(tours) {
     const container2 = document.getElementById("container")
 
@@ -45,19 +42,11 @@ function renderTours(tours) {
 
                     <div class="p-6">
                         <div>
-<<<<<<< HEAD
                             <p id="tourCountry" class="text-yellow-600 font-medium text-sm hover:underline">
                                 <a href="#">${tour.country}</a>
                             </p>
                             <a href="#">
                                 <p id="tourCity" class="font-semibold mt-3 text-xl">${tour.city}</p>
-=======
-                            <p class="text-yellow-600 font-medium text-sm hover:underline">
-                                <a href="#">${tour.country}</a>
-                            </p>
-                            <a href="#">
-                                <p class="font-semibold mt-3 text-xl">${tour.city}</p>
->>>>>>> 617ead5f18b36dd765fcdeed771f34871d81f4e3
                                 <p class="text-gray-500 mt-3">${tour.hotelName}</p>
                             </a>
                         </div>
@@ -85,12 +74,8 @@ function renderTours(tours) {
                         <p>Продолжительность тура: ${duration} дней</p>
                         </div>
 
-<<<<<<< HEAD
                         <button class="btn-primary mt-4 text-sm">Подробнее</button>
                         <button class="btn-primary mt-4 text-sm">Добавить в избранное</button>
-=======
-                        <button class="btn-primary mt-4">Подробнее</button>
->>>>>>> 617ead5f18b36dd765fcdeed771f34871d81f4e3
 
                     </div>
             </div>
@@ -98,23 +83,6 @@ function renderTours(tours) {
     })
 }
 
-<<<<<<< HEAD
-=======
-const tourCity = document.getElementById('tour.city');
-const tourCountry = document.getElementById('tour.country');
-
-function getCity(tourCity) {
-    let checkCity;
-
-    if (tourCity == null) {
-        checkCity = tourCountry;
-    } else {
-        checkCity = tourCity;
-    }
-    return checkCity
-}
-
->>>>>>> 617ead5f18b36dd765fcdeed771f34871d81f4e3
 function filterByCountry(tours, country) {
     if (country) {
         const filtredTours = tours.filter((tour) => {
@@ -126,7 +94,6 @@ function filterByCountry(tours, country) {
     }
 }
 
-<<<<<<< HEAD
 function filterByRating(tours, rating) {
     if (rating) {
         const filtredTours = tours.filter((tour) => {
@@ -138,8 +105,6 @@ function filterByRating(tours, rating) {
     }
 }
 
-=======
->>>>>>> 617ead5f18b36dd765fcdeed771f34871d81f4e3
 async function init() {
     const tours = await makeTour()
     renderTours(tours)
@@ -148,7 +113,6 @@ async function init() {
         .getElementById("indonesia")
         .addEventListener("click", () => filterByCountry(tours, "Индонезия"))
     document
-<<<<<<< HEAD
         .getElementById("egypt")
         .addEventListener("click", () => filterByCountry(tours, "Египет"))
     document
@@ -161,8 +125,6 @@ async function init() {
         .getElementById("tanzania")
         .addEventListener("click", () => filterByCountry(tours, "Танзания"))
     document
-=======
->>>>>>> 617ead5f18b36dd765fcdeed771f34871d81f4e3
         .getElementById("thailand")
         .addEventListener("click", () => filterByCountry(tours, "Тайланд"))
     document
@@ -171,7 +133,6 @@ async function init() {
     document
         .getElementById("all")
         .addEventListener("click", () => filterByCountry(tours))
-<<<<<<< HEAD
 
     document
         .getElementById("rating10")
@@ -200,8 +161,3 @@ init()
 
 
 
-=======
-}
-
-init()
->>>>>>> 617ead5f18b36dd765fcdeed771f34871d81f4e3

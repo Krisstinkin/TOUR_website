@@ -5,13 +5,9 @@
 .btn-primary {
     @apply border border-solid border-yellow-600 px-4 py-2 rounded-md hover:bg-yellow-600 hover:text-white transition-all duration-300;
 }
-<<<<<<< HEAD
 
 .btn-primary2 {
     @apply border border-solid border-yellow-600 px-4 py-2 rounded-md hover:bg-yellow-600 transition-all duration-300;
 }
 
 
-
-=======
->>>>>>> 617ead5f18b36dd765fcdeed771f34871d81f4e3
