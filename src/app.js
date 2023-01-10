@@ -10,20 +10,34 @@ async function makeTour() {
     return data
 }
 
+// function getCity(tours) {
+//     
+//     let checkCity = ' ';
+
+//     tours.forEach(tour => {
+//         if (tour.city === null) {
+//         return tour.city = checkCity
+// }
+// })
+// }
+
 const tourCity = document.getElementById('tourCity');
 const tourCountry = document.getElementById('tourCountry');
+// const tourCountryJson = JSON.stringify(tourCountry);
 
-
-function getCity(tourCity) {
+function getCity(tours) {
     let checkCity;
 
-    if (tourCity === null) {
+    tours.forEach(tour => {
+    if (tour.city === null) {
         checkCity = tourCountry;
     } else {
         checkCity = tourCity;
     }
     return checkCity
+})
 }
+
 
 function renderTours(tours) {
     const container2 = document.getElementById("container")
@@ -34,7 +48,7 @@ function renderTours(tours) {
         const pattern = 'dd MMMM y'
         const option = {locale: ru}
         const duration = differenceInCalendarDays(new Date(tour.endTime), new Date(tour.startTime))
-
+        getCity(tours)
         container2.innerHTML += `
         
             <div class="bg-white shadow-lg rounded-lg overflow-hidden">
@@ -96,19 +110,45 @@ function filterByCountry(tours, country) {
 }
 
 function filterByRating(tours, rating) {
+    const ratingSelect = document.getElementById("rating").value
+
     if (rating) {
         const filtredTours = tours.filter((tour) => {
-            return tour.rating >= rating
+            return tour.rating >= ratingSelect
         })
         renderTours(filtredTours)
     } else {
         renderTours(tours)
     }
+
 }
+
+function filterByPrice(tours, pricing) {
+    const minPrice = document.getElementById('minPrice').value
+    const maxPrice = document.getElementById('maxPrice').value
+    
+        const filteredTours = tours.filter((tour) => {
+            if (minPrice && maxPrice) {
+                return tour.price <= maxPrice && tour.price >= minPrice
+            } else if (maxPrice) {
+                return tour.price <= maxPrice
+            } else if (minPrice) {
+                return tour.price >= minPrice
+            } else {
+                renderTours(tours)
+            }
+        })
+        
+        renderTours(filteredTours)
+
+        document.getElementById('minPrice').value = ""
+        document.getElementById('maxPrice').value = ""
+
+} 
 
 async function init() {
     const tours = await makeTour()
-    renderTours(tours)
+    renderTours(tours)    
 
     document
         .getElementById("indonesia")
@@ -134,26 +174,13 @@ async function init() {
     document
         .getElementById("all")
         .addEventListener("click", () => filterByCountry(tours))
-
-    document
-        .getElementById("rating10")
-        .addEventListener("click", () => filterByRating(tours, 10))
     
     document
-        .getElementById("rating9")
-        .addEventListener("click", () => filterByRating(tours, 9))
-    
-    document
-        .getElementById("rating8")
-        .addEventListener("click", () => filterByRating(tours, 8))
+        .getElementById('btnPrice')
+        .addEventListener('click', () => filterByPrice(tours))
 
-    document
-        .getElementById("rating7")
-        .addEventListener("click", () => filterByRating(tours, 7))
-
-    document
-        .getElementById("ratingAll")
-        .addEventListener("click", () => filterByRating(tours))
+    ratingSelect.
+    addEventListener("change", () => filterByRating(tours, ratingSelect.value))       
 
 }
 

@@ -11,9 +11,10 @@
     <body>
 
         <div class="bg-gray-50">
-
-            <div class="ml-6 mr-6 gap-8 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8">
-
+            
+            <div class="ml-6 mr-6 gap-8 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8"> 
+                
+                <!--фильтр по стране-->
                 <button id="thailand" class="btn-primary mt-6 mr-2">
                     ТАИЛАНД
                 </button>
@@ -39,18 +40,31 @@
                     ВСЕ СТРАНЫ
                 </button>
 
-                <div class="btn-primary2 mr-2">
-                    <label class="mb-6">Рейтинг отеля</label>
+            </div>
+
+            <div class="mt-6 ml-6 mr-6 gap-8 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6">
+                <div class="mr-2"> <!--фильтр по рейтингу-->
+                    <label class="text-yellow-600">Рейтинг отеля</label>
                     <div>
-                        <select>
-                            <option id="rating10">10 звезд</option>
-                            <option id="rating9">9 звезд</option>
-                            <option id="rating8">8 звезд</option>
-                            <option id="rating7">7 звезд</option>
-                            <option id="all">Выбрать все отели</option>
+                        <select id="rating" class="border mt-2">
+                            <option value="10">10 звезд</option>
+                            <option value="9">9 звезд</option>
+                            <option value="8">8 звезд</option>
+                            <option value="7">7 звезд</option>
+                            <option value="6">Выбрать все отели</option>
                         </select>
                     </div>
                 </div>    
+
+                <div> <!--фильтр по цене-->
+                    <p class="text-yellow-600">Цена</p>
+                    <div class="mt-2">
+                        <input id="minPrice" class="border mb-2" type="number" placeholder="От 20 000" />
+                        <input id="maxPrice" class="border" type="number" placeholder="До 1 000 000" />
+                        <button id="btnPrice" class="btn-primary mt-2">Применить</button>
+                    </div>
+                </div> 
+                
             </div>
 
             <div class="max-w-6xl mx-auto py-16 px-12 sm:px-8">
