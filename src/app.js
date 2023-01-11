@@ -1,5 +1,5 @@
-import { format, differenceInCalendarDays } from 'date-fns'
-import { ru } from 'date-fns/locale'
+import { format, differenceInCalendarDays } from "date-fns"
+import { ru } from "date-fns/locale"
 
 async function makeTour() {
     const response = await fetch(
@@ -10,34 +10,16 @@ async function makeTour() {
     return data
 }
 
-// function getCity(tours) {
-//     
-//     let checkCity = ' ';
+function getCity(tour) {
+    let checkCity
 
-//     tours.forEach(tour => {
-//         if (tour.city === null) {
-//         return tour.city = checkCity
-// }
-// })
-// }
-
-const tourCity = document.getElementById('tourCity');
-const tourCountry = document.getElementById('tourCountry');
-// const tourCountryJson = JSON.stringify(tourCountry);
-
-function getCity(tours) {
-    let checkCity;
-
-    tours.forEach(tour => {
-    if (tour.city === null) {
-        checkCity = tourCountry;
+    if (tour.city && tour.city.length > 0) {
+        checkCity = tour.city
     } else {
-        checkCity = tourCity;
+        checkCity = tour.country
     }
     return checkCity
-})
 }
-
 
 function renderTours(tours) {
     const container2 = document.getElementById("container")
@@ -45,10 +27,21 @@ function renderTours(tours) {
     container2.innerHTML = ""
 
     tours.forEach((tour) => {
-        const pattern = 'dd MMMM y'
-        const option = {locale: ru}
-        const duration = differenceInCalendarDays(new Date(tour.endTime), new Date(tour.startTime))
-        getCity(tours)
+        const pattern = "dd MMMM y"
+        const option = { locale: ru }
+        const duration = differenceInCalendarDays(
+            new Date(tour.endTime),
+            new Date(tour.startTime)
+        )
+
+        let city = getCity(tour)
+
+        // if (tour.city && tour.city.length > 0) {
+        //             city = tour.city;
+        //         } else {
+        //             city = tour.country;
+        // }
+
         container2.innerHTML += `
         
             <div class="bg-white shadow-lg rounded-lg overflow-hidden">
@@ -61,8 +54,10 @@ function renderTours(tours) {
                                 <a href="#">${tour.country}</a>
                             </p>
                             <a href="#">
-                                <p id="tourCity" class="font-semibold mt-3 text-xl">${tour.city}</p>
-                                <p class="text-gray-500 mt-3">${tour.hotelName}</p>
+                                <p id="tourCity" class="font-semibold mt-3 text-xl">${city}</p>
+                                <p class="text-gray-500 mt-3">${
+                                    tour.hotelName
+                                }</p>
                             </a>
                         </div>
 
@@ -80,7 +75,15 @@ function renderTours(tours) {
                         <div class="mt-3 text-gray-500 text-sm flex items-center">
 
                             <p class="ml-1">
-                            ${format(new Date(tour.startTime), pattern, option)} - ${format(new Date(tour.endTime), pattern, option)}
+                            ${format(
+                                new Date(tour.startTime),
+                                pattern,
+                                option
+                            )} - ${format(
+            new Date(tour.endTime),
+            pattern,
+            option
+        )}
                             </p>
                             
                         </div>
@@ -110,45 +113,43 @@ function filterByCountry(tours, country) {
 }
 
 function filterByRating(tours, rating) {
-    const ratingSelect = document.getElementById("rating").value
-
+    console.log(tours)
+    console.log(rating)
     if (rating) {
         const filtredTours = tours.filter((tour) => {
-            return tour.rating >= ratingSelect
+            return tour.rating >= rating
         })
         renderTours(filtredTours)
     } else {
         renderTours(tours)
     }
-
 }
 
 function filterByPrice(tours, pricing) {
-    const minPrice = document.getElementById('minPrice').value
-    const maxPrice = document.getElementById('maxPrice').value
-    
-        const filteredTours = tours.filter((tour) => {
-            if (minPrice && maxPrice) {
-                return tour.price <= maxPrice && tour.price >= minPrice
-            } else if (maxPrice) {
-                return tour.price <= maxPrice
-            } else if (minPrice) {
-                return tour.price >= minPrice
-            } else {
-                renderTours(tours)
-            }
-        })
-        
-        renderTours(filteredTours)
+    const minPrice = document.getElementById("minPrice").value
+    const maxPrice = document.getElementById("maxPrice").value
 
-        document.getElementById('minPrice').value = ""
-        document.getElementById('maxPrice').value = ""
+    const filteredTours = tours.filter((tour) => {
+        if (minPrice && maxPrice) {
+            return tour.price <= maxPrice && tour.price >= minPrice
+        } else if (maxPrice) {
+            return tour.price <= maxPrice
+        } else if (minPrice) {
+            return tour.price >= minPrice
+        } else {
+            renderTours(tours)
+        }
+    })
 
-} 
+    renderTours(filteredTours)
+
+    document.getElementById("minPrice").value = ""
+    document.getElementById("maxPrice").value = ""
+}
 
 async function init() {
     const tours = await makeTour()
-    renderTours(tours)    
+    renderTours(tours)
 
     document
         .getElementById("indonesia")
@@ -174,14 +175,15 @@ async function init() {
     document
         .getElementById("all")
         .addEventListener("click", () => filterByCountry(tours))
-    
+
     document
-        .getElementById('btnPrice')
-        .addEventListener('click', () => filterByPrice(tours))
+        .getElementById("btnPrice")
+        .addEventListener("click", () => filterByPrice(tours))
 
-    ratingSelect.
-    addEventListener("change", () => filterByRating(tours, ratingSelect.value))       
-
+    const ratingSelect = document.getElementById("rating")
+    ratingSelect.addEventListener("change", () =>
+        filterByRating(tours, ratingSelect.value)
+    )
 }
 
 init()
