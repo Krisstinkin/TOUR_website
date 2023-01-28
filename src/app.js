@@ -1,6 +1,8 @@
 import { format, differenceInCalendarDays } from "date-fns"
 import { ru } from "date-fns/locale"
 
+//рисуем прелоадер
+
 document.addEventListener('DOMContentLoaded', () => {
         const mediaFiles = document.querySelectorAll('img');
         let i = 0
@@ -36,10 +38,10 @@ function getCity(tour) {
     return checkCity
 }
 
+//отрисовываем основные туры, полученные с сервера
+
 function renderTours(tours) {
     const container2 = document.getElementById("container")
-
-    const button = `<button class="btn-primary mt-4 text-sm">В избранное</button>`
 
     if (tours.length === 0) {
         container2.innerHTML = 'Извините, туры не найдены. <br> Повторите попытку'
@@ -117,7 +119,8 @@ function renderTours(tours) {
                         </div>
 
                         
-                        ${button}
+                        <button id="addSelect-${tour.id}" class="btn-primary mt-4 text-sm">В избранное</button>
+                        <button id="deleteSelect-${tour.id}" class="hidden btn-primary mt-4 text-sm">Отменить</button>
                         <button id="openModalButton-${tour.id}" class="btn-primary mt-4 text-sm">Забронировать</button>
                         
                     </div>
@@ -136,7 +139,24 @@ function renderTours(tours) {
             
     })
     }
+
+    tours.forEach((tour) => {
+        document
+        .getElementById(`addSelect-${tour.id}`)
+        .addEventListener("click", () => 
+        selectedTours(tour.id))
+    })
+
+    tours.forEach((tour) => {
+        document
+        .getElementById(`deleteSelect-${tour.id}`)
+        .addEventListener("click", () => 
+        selectedTours(tour.id))
+    })
+
 }
+
+//делаем блок с фильтрацией
 
 function filterByCountry(tours, country) {
     if (country) {
@@ -182,6 +202,8 @@ function filterByPrice(tours, pricing) {
     document.getElementById("minPrice").value = ""
     document.getElementById("maxPrice").value = ""
 }
+
+//делаем блок с бронированием туров
 
 let indexId; 
 async function modalOrder(id) {
@@ -244,14 +266,46 @@ async function modalOrder(id) {
     indexId = id;
 }
 
-async function getOrder() {
+//передаем выбранные туры для бронирования на сервер
 
+async function getOrder(event) {
+
+    //отменяем стандартное поведение браузера при работе с form
+    event.preventDefault()
+    
     const name = document.getElementById('name').value
     const phone = document.getElementById('phone').value
     const mail = document.getElementById('email').value
     const comment = document.getElementById('comment').value
 
     const containerError = document.getElementById('container_error')
+    containerErrorName = document.getElementById('container_error_name')
+    containerErrorPhone = document.getElementById('container_error_phone')
+    containerErrorEmail = document.getElementById('container_error_email')
+
+    if (!name) {
+        containerErrorName.innerHTML += '<p class="text-red-500 mb-2">Введите, пожалуйста, ваше имя</p>'
+        return
+    }
+
+    if (!phone) {
+        containerErrorPhone.innerHTML += '<p class="text-red-500 mb-2">Введите, пожалуйста, ваш телефон</p>'
+        return
+    }
+
+    if (!mail) {
+        containerErrorEmail.innerHTML += '<p class="text-red-500 mb-2">Введите, пожалуйста, ваш e-mail</p>'
+        return
+    }
+
+    function clearValue() {
+        document.getElementById("name").value = "";
+        document.getElementById("phone").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("comment").value = "";
+    }
+
+    clearValue()
 
     const params = {
         customerName: name,
@@ -266,8 +320,6 @@ async function getOrder() {
         method: "POST",
         body: JSON.stringify(params)
     })
-
-    let data = await response.json()
     
     try {
         let data = await response.json()
@@ -277,15 +329,151 @@ async function getOrder() {
         };
 
     } catch (error) {
-        containerError.innerHTML = 'Упс, что-то пошло не так...'
+        containerError.innerHTML += 'Упс, что-то пошло не так...'
         
     }
 }
 
+// делаем блок с добавлением туров в избранное
+
+function selectedTours(tours) {
+    const container2 = document.getElementById("container")
+
+    if (tours.length === 0) {
+        container2.innerHTML = 'Извините, туры не найдены. <br> Повторите попытку'
+    } else {
+        container2.innerHTML = ""
+
+    tours.forEach((tour) => {
+        const pattern = "dd MMMM y"
+        const option = { locale: ru }
+        const duration = differenceInCalendarDays(
+            new Date(tour.endTime),
+            new Date(tour.startTime)
+        )
+
+        let city = getCity(tour)
+
+        // if (tour.city && tour.city.length > 0) {
+        //             city = tour.city;
+        //         } else {
+        //             city = tour.country;
+        // }
+
+        container2.innerHTML += `
+        
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                   
+                    <div>
+                    <img class="h-96 w-full" src="${tour.image}" alt="" />
+                    </div>
+                    
+                    <div class="p-6">
+                        <div>
+                            <div class="flex justify-between">
+                            <p id="tourCountry" class="text-yellow-600 font-medium text-sm hover:underline">
+                                <a href="#">${tour.country}</a>
+                            </p>
+                            </div>
+                            <a href="#">
+                                <p id="tourCity" class="font-semibold mt-3 text-xl">${city}</p>
+                                <p class="text-gray-500 mt-3">${
+                                    tour.hotelName
+                                }</p>
+                            </a>
+                        </div>
+
+                        <div class="mt-3 text-gray-500 text-sm flex items-center">
+                            <img class="h-4" src="https://img.icons8.com/ios/50/null/christmas-star.png"/>
+
+                            <span class="ml-1">${tour.rating}</span>
+                            <span aria-hidden="true" class="mx-2">&middot;</span>
+
+                            <img class="h-5" src="https://img.icons8.com/ios/50/null/ruble.png"/>
+
+                            <span class="ml-1">${tour.price}</span>
+                        </div>
+
+                        <div class="mt-3 text-gray-500 text-sm flex items-center">
+
+                            <p class="ml-1">
+                                ${format(
+                                    new Date(tour.startTime),
+                                    pattern,
+                                    option
+                                )} - ${format(
+                                        new Date(tour.endTime),
+                                        pattern,
+                                        option
+                                )}
+                            </p>
+                            
+                        </div>
+
+                        <div class="mt-3 text-gray-500 text-sm flex items-center">
+                        <p>Продолжительность тура: ${duration} дней</p>
+                        </div>
+
+                        <button id="deleteSelect-${tour.id}" class="btn-primary mt-4 text-sm">Отменить</button>
+                        <button id="openModalButton-${tour.id}" class="btn-primary mt-4 text-sm">Забронировать</button>
+                        
+                    </div>
+            </div>
+        `
+    })
+
+    tours.forEach((tour) => {
+        document
+        .getElementById(`deleteSelect-${tour.id}`)
+        .addEventListener("click", () => 
+        delSelect(tour.id))
+    })
+    }
+}
+
+function delSelect(id) {
+    let result = Select.find(res => res.id === id)
+    let index = Select.indexOf(result);
+    Select.splice(index, 1);
+    renderFavs(Select)
+
+    if (Select.length == 0) {
+        document.getElementById("container").style.display = "flex"
+        document.getElementById('container').innerHTML = ''
+        document.getElementById('container').innerHTML += `
+        <div class="flex justify-center flex-col items-center m-auto">
+        <img src="https://www.pngplay.com/wp-content/uploads/12/Sad-Cat-Meme-Transparent-PNG.png">
+  <p class="text-slate-600 text-2xl">Пока что тут пусто :( </p>
+        </div>
+    `
+    }
+    workJson()
+}
+
+
+function checkSelectedTours() {
+    if (Select.length != 0) {
+        renderselectedTours(favTours)
+        workJson()
+    } else {
+
+        document.getElementById("container").style.display = "flex"
+        document.getElementById('container').innerHTML = ''
+        document.getElementById('container').innerHTML += `
+            <div class="flex justify-center flex-col items-center m-auto">
+            <img src="https://www.pngplay.com/wp-content/uploads/12/Sad-Cat-Meme-Transparent-PNG.png">
+      <p class="text-slate-600 text-2xl">Пока что тут пусто :( </p>
+            </div>
+        `
+        workJson()
+    }
+}
+
+let Select = [];
+
 async function init() {
     const tours = await makeTour()
     renderTours(tours)
-    getOrder()
 
     document
         .getElementById("indonesia")
