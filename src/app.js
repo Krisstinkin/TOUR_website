@@ -16,7 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
                }
             }
         })
-    })
+})
+
+//получаем данные с бекэнда
 
 async function makeTour() {
     const response = await fetch(
@@ -135,7 +137,7 @@ function renderTours(tours) {
         //ищем нужный тур по id
             .getElementById(`openModalButton-${tour.id}`)
             .addEventListener("click", () => 
-            modalOrder(tour.id)) //если нажали на кнопку, модальное окно открывается
+            modalOrder(tour.id)) //если нажали на кнопку, то модальное окно открывается
             
     })
     }
@@ -144,14 +146,14 @@ function renderTours(tours) {
         document
         .getElementById(`addSelect-${tour.id}`)
         .addEventListener("click", () => 
-        selectedTours(tour.id))
+        Selected(tour.id))
     })
 
     tours.forEach((tour) => {
         document
         .getElementById(`deleteSelect-${tour.id}`)
         .addEventListener("click", () => 
-        selectedTours(tour.id))
+        Selected(tour.id))
     })
 
 }
@@ -206,6 +208,7 @@ function filterByPrice(tours, pricing) {
 //делаем блок с бронированием туров
 
 let indexId; 
+
 async function modalOrder(id) {
 
     const response = await fetch('https://www.bit-by-bit.ru/api/student-projects/tours');
@@ -261,7 +264,6 @@ async function modalOrder(id) {
 
             </div>
         </div>
-               
         `
     indexId = id;
 }
@@ -336,7 +338,25 @@ async function getOrder(event) {
 
 // делаем блок с добавлением туров в избранное
 
-function selectedTours(tours) {
+// проверяем есть ли уже что-то в Избранном или нет
+
+function checkSelected() {
+
+    if (Select.length != 0) {
+        renderSelected(Select)
+        saveToLocalStorage()
+
+    } else {
+        const container2 = document.getElementById("container")
+        container2.innerHTML = 'Извините, туры не найдены. <br> Повторите попытку'
+
+        saveToLocalStorage()
+    }
+}
+
+//отрисовываем Избранные туры
+
+function renderSelected(tours) {
     const container2 = document.getElementById("container")
 
     if (tours.length === 0) {
@@ -415,8 +435,7 @@ function selectedTours(tours) {
                         </div>
 
                         <button id="deleteSelect-${tour.id}" class="btn-primary mt-4 text-sm">Отменить</button>
-                        <button id="openModalButton-${tour.id}" class="btn-primary mt-4 text-sm">Забронировать</button>
-                        
+                                                
                     </div>
             </div>
         `
@@ -431,50 +450,86 @@ function selectedTours(tours) {
     }
 }
 
-function delSelect(id) {
-    let result = Select.find(res => res.id === id)
-    let index = Select.indexOf(result);
-    Select.splice(index, 1);
-    renderFavs(Select)
-
-    if (Select.length == 0) {
-        document.getElementById("container").style.display = "flex"
-        document.getElementById('container').innerHTML = ''
-        document.getElementById('container').innerHTML += `
-        <div class="flex justify-center flex-col items-center m-auto">
-        <img src="https://www.pngplay.com/wp-content/uploads/12/Sad-Cat-Meme-Transparent-PNG.png">
-  <p class="text-slate-600 text-2xl">Пока что тут пусто :( </p>
-        </div>
-    `
-    }
-    workJson()
-}
-
-
-function checkSelectedTours() {
-    if (Select.length != 0) {
-        renderselectedTours(favTours)
-        workJson()
-    } else {
-
-        document.getElementById("container").style.display = "flex"
-        document.getElementById('container').innerHTML = ''
-        document.getElementById('container').innerHTML += `
-            <div class="flex justify-center flex-col items-center m-auto">
-            <img src="https://www.pngplay.com/wp-content/uploads/12/Sad-Cat-Meme-Transparent-PNG.png">
-      <p class="text-slate-600 text-2xl">Пока что тут пусто :( </p>
-            </div>
-        `
-        workJson()
-    }
-}
+// получаем массив с избранными турами
 
 let Select = [];
+
+//делаем функцию сохранить в хранилище 
+
+function saveToLocalStorage() {
+    const toursJson = JSON.stringify(Select); //делаем преобразование массива в JSON 
+    localStorage.setItem("Select", toursJson); //передаем данные в хранилище
+}
+
+async function Selected(id) {
+    const response = await fetch('https://www.bit-by-bit.ru/api/student-projects/tours');
+    const tours = await response.json();
+
+    if (Select.length != 0) {
+
+        //находим тур по айди из нашего массива
+        let currentTour = Select.find(c => c.id === id)
+
+        //если элемента еще нет в массиве - мы его добавляем
+        if (!currentTour) {
+            tours.forEach((tour) => {
+                if (id === tour.id) {
+                    Select.push(tour); //добавляем элемент в массив Select
+                    saveToLocalStorage()
+                }
+            })
+        
+        //если элемент уже есть в массиве - его надо удалить
+        } else {
+            let index = Select.indexOf(currentTour); //находим тур какой по порядку стоит 
+            Select.splice(index, 1);
+            document.getElementById(`deleteSelect-` + id).style.display = "flex"
+            document.getElementById(`addSelect-` + id).style.display = "none"
+            saveToLocalStorage()
+        }
+
+    } else {
+        tours.forEach((tour) => {
+            if (id === tour.id) {
+                Select.push(tour);
+                saveToLocalStorage()
+            }
+        })
+    }
+    
+    saveToLocalStorage()
+}
+
+// делаем функцию для удаления тура из избранного
+
+function delSelect(id) {
+
+    //находим тур по айди из нашего массива
+    let currentTour = Select.find(с => с.id === id)
+    
+    //присваиваем переменной индексы туров из массива
+    let tourIndex = Select.indexOf(currentTour); 
+    
+    //удаляем тур
+    Select.splice(tourIndex, 1); 
+    
+    renderSelected(Select)
+    saveToLocalStorage();
+}
+
+//делаем преобразование из JSON в JS
+
+const toursJson = localStorage.getItem("Select"); 
+  
+if (toursJson) {
+    Select = JSON.parse(toursJson);
+}    
 
 async function init() {
     const tours = await makeTour()
     renderTours(tours)
 
+    //блок вызова функции для фильтрации
     document
         .getElementById("indonesia")
         .addEventListener("click", () => filterByCountry(tours, "Индонезия"))
@@ -509,10 +564,23 @@ async function init() {
         filterByRating(tours, ratingSelect.value)
     )
 
+    //блок вызова функции для формы бронирования
+
     const form = document.getElementById('form');
     form.addEventListener('submit', getOrder);
 
+    //блок вызова функции для Избранных туров
+
+    document
+        .getElementById("allTours")
+        .addEventListener("click", () => renderTours(tours))
+
+    document
+        .getElementById("selectedTours")
+        .addEventListener("click", () => checkSelected())
+
 }
+
 
 init()
 
