@@ -387,7 +387,7 @@ function renderSelected(tours) {
                     <div>
                     <img class="h-96 w-full" src="${tour.image}" alt="" />
                     </div>
-                    
+                   
                     <div class="p-6">
                         <div>
                             <div class="flex justify-between">
