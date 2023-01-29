@@ -387,13 +387,14 @@ function renderSelected(tours) {
                     <div>
                     <img class="h-96 w-full" src="${tour.image}" alt="" />
                     </div>
-                    
+                   
                     <div class="p-6">
                         <div>
                             <div class="flex justify-between">
                             <p id="tourCountry" class="text-yellow-600 font-medium text-sm hover:underline">
                                 <a href="#">${tour.country}</a>
                             </p>
+                            
                             </div>
                             <a href="#">
                                 <p id="tourCity" class="font-semibold mt-3 text-xl">${city}</p>
