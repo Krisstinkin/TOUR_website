@@ -5,85 +5,130 @@
         <title>My First CSS framework TOURwebsite</title>
         <link rel="stylesheet" href="styles.css" />
         <link rel="stylesheet" href="styles.scss" />
-        
     </head>
 
     <body>
 
-        <div class="bg-gray-50">
-            
-            <div class="ml-6 mr-6 gap-8 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8"> 
-                
-                <!--фильтр по стране-->
-                <button id="thailand" class="btn-primary mt-6 mr-2">
-                    ТАИЛАНД
-                </button>
-                <button id="egypt" class="btn-primary mt-6 mr-2">
-                    ЕГИПЕТ
-                </button>
-                <button id="cypros" class="btn-primary mt-6 mr-2">
-                    КИПР
-                </button>
-                <button id="mexico" class="btn-primary mt-6 mr-2">
-                    МЕКСИКА
-                </button>
-                <button id="tanzania" class="btn-primary mt-6 mr-2">
-                    ТАНЗАНИЯ
-                </button>
-                <button id="maldives" class="btn-primary mt-6 mr-2">
-                    МАЛЬДИВЫ
-                </button>
-                <button id="indonesia" class="btn-primary mt-6 mr-2">
-                    ИНДОНЕЗИЯ
-                </button>
-                <button id="all" class="btn-primary mt-6 mr-2">
-                    ВСЕ СТРАНЫ
-                </button>
-
+        <div id="preloader" class="preloader">
+            <div class="preloader_loader">
+                <div class="loadingio-spinner-spinner-9cfz2hvkuwm"><div class="ldio-lbmg93mbja">
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    </div></div>
+                <span class="preloader_percent">
+                    <span id="percents">0</span>%
+                </span>
             </div>
 
-            <div class="mt-6 ml-6 mr-6 gap-8 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6">
-                <div class="mr-2"> <!--фильтр по рейтингу-->
-                    <label class="text-yellow-600">Рейтинг отеля</label>
-                    <div>
-                        <select id="rating" class="border mt-2">
-                            <option value="10">10 звезд</option>
-                            <option value="9">9 звезд</option>
-                            <option value="8">8 звезд</option>
-                            <option value="7">7 звезд</option>
-                            <option value="6">Выбрать все отели</option>
-                        </select>
-                    </div>
-                </div>    
+        </div>         
 
-                <div> <!--фильтр по цене-->
-                    <p class="text-yellow-600">Цена</p>
-                    <div class="mt-2">
-                        <input id="minPrice" class="border mb-2" type="number" placeholder="От 20 000" />
-                        <input id="maxPrice" class="border" type="number" placeholder="До 1 000 000" />
-                        <button id="btnPrice" class="btn-primary mt-2">Применить</button>
-                    </div>
-                </div> 
-                
+        <div class="bg-gray-50">
+
+            <div id="add-modal" class="add-modal pt-24 left-0 top-0 w-full h-full overflow-auto"> 
+                <div class="add-modal-content bg-gray-50 m-auto border-solid border-2 border-yellow-600 rounded-md w-1/3 shadow-md relative"> 
+                    <div> 
+                        <span class="close fixed top-3 right-5 text-3xl font-bold text-gray-400 hover:text-yellow-600 cursor-pointer focus:text-yellow-600 cursor-pointer"><i class="far fa-times-circle"></i></span> 
+                        <div id="add-modal-cards"></div> 
+
+                        <div class="p-4 flex"> 
+                                <form id="form" method="post" target="_blank" class="flex">
+                                    <fieldset>
+                                        <legend class="font-bold text-gray-600 mb-4">Заполните необходимую информацию</legend> 
+                                            <p for="name " class="text-gray-600 mb-2">Имя, Фамилия</p> 
+                                                <input type="text" class="border mb-4 text-gray-600" name="name" placeholder="ФИО" id="name"></input>
+                                                <div id="container_error_name"></div>
+
+                                            <p for="number" class="text-gray-600 mb-2">Телефон</p> 
+                                                <input type="text" class="border mb-4 text-gray-600" name="phone" placeholder="+7 (000) 000-00-00" id="phone"></input>
+                                                <div id="container_error_phone"></div>
+
+                                            <p for="email" class="text-gray-600 mb-2">E-mail</p> 
+                                                <input type="text" class="border mb-4 text-gray-600" name="mail" placeholder="email" id="email"></input>
+                                                <div id="container_error_email"></div>
+                                            
+                                            <p class="text-gray-600 mb-2">Комментарий к заказу</p> 
+                                                <input type="text" class="border mb-4 text-gray-600" name="comment" id="comment" placeholder="..."></input>
+                                    </fieldset>  
+                                    <button class="btn-primary flex justify-center m-auto mb-6" type="submit">Отправить</button>                                
+                                </form>                 
+                        </div>     
+                        
+                        
+                                    
+                    </div> 
+                </div>
             </div>
 
             <div class="max-w-6xl mx-auto py-16 px-12 sm:px-8">
 
                 <div class="flex justify-end gap-4">
-                    <button class="btn-primary">Избранное</button>
-                    <!-- <button class="btn-primary">Добавить маршрут</button> -->
+                    <button id="allTours" class="btn-primary">Все туры</button>
+                    <button id="selectedTours" class="btn-primary">Избранное</button>
                 </div>
 
-                <div class="text-center mt-6">
+                <div class="text-center mt-6 mb-6">
                     <h1 class="text-4xl font-bold text-gray-900">
-                        Маршруты по Любимым странам
+                        Путешествия по Любимым странам
                     </h1>
                     <p class="text-gray-500 text-xl mt-4">
-                        Самые удивительные маршруты прогулок по улицам любимого
-                        города
+                        Выбирайте и покупайте туры онлайн
                     </p>
                 </div>
 
+                <div class="text-xs gap-8 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8"> 
+                
+                    <!--фильтр по стране-->
+                    <button id="thailand" class="btn-primary">
+                        ТАИЛАНД
+                    </button>
+                    <button id="egypt" class="btn-primary">
+                        ЕГИПЕТ
+                    </button>
+                    <button id="cypros" class="btn-primary">
+                        КИПР
+                    </button>
+                    <button id="mexico" class="btn-primary">
+                        МЕКСИКА
+                    </button>
+                    <button id="tanzania" class="btn-primary">
+                        ТАНЗАНИЯ
+                    </button>
+                    <button id="maldives" class="btn-primary">
+                        МАЛЬДИВЫ
+                    </button>
+                    <button id="indonesia" class="btn-primary">
+                        ИНДОНЕЗИЯ
+                    </button>
+                    <button id="all" class="btn-primary">
+                        ВСЕ СТРАНЫ
+                    </button>
+    
+                </div>
+    
+                <div class="mt-6 gap-8 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4">
+                    <div> <!--фильтр по рейтингу-->
+                        <label class="text-yellow-600">Рейтинг отеля</label>
+                        <div>
+                            <select id="rating" class="border mt-2">
+                                <option value="10">10 звезд</option>
+                                <option value="9">9 звезд</option>
+                                <option value="8">8 звезд</option>
+                                <option value="7">7 звезд</option>
+                                <option value="6">Все отели</option>
+                            </select>
+                        </div>
+                    </div>    
+    
+                    <div> <!--фильтр по цене-->
+                        <p class="text-yellow-600">Цена</p>
+                        <div class="mt-2">
+                            <input id="minPrice" class="border mb-2" type="number" placeholder="От 20 000 руб" />
+                            <input id="maxPrice" class="border" type="number" placeholder="До 1 000 000 руб" />
+                            <button id="btnPrice" class="btn-primary mt-2 text-sm">Применить</button>
+                        </div>
+                    </div> 
+                    
+                </div>
+                <!--контейнер исходных туров-->
                 <div
                     class="mt-12 gap-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
                     id="container"
@@ -217,8 +262,12 @@
             </div>
         </div>
 
-
-
     </body>
+
     <script type="module" src="app.js"></script>
+    <script src="https://kit.fontawesome.com/bcc474ca0b.js" crossorigin="anonymous"></script>
+    
 </html>
+
+
+     
